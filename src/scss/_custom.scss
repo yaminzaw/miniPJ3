@@ -1,0 +1,56 @@
+// Here you can add other styles
+.headerRow{
+    margin-bottom: 30px;
+}
+.headerText{
+    color: rgb(121, 3, 231);
+}
+.imgRow{
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.image{
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+}
+.rowDiv{
+    margin-bottom: 30px;
+}
+.ColDiv{
+    text-align: start;
+}
+
+.radioLabel{
+    font-size: 17px;
+    margin-right: 40px;
+}
+.Radio{
+    width: 15px;
+    height: 20px;
+    padding: 20px;
+}
+.chk{
+    width: 15px;
+    height:20px;
+}
+.button{
+    max-width: 100%;
+    min-width: 60%;
+    height:45px;
+    background-color: rgb(184, 139, 226);
+    border-radius: 2rem;
+    border:rgb(142, 30, 247);
+    font-size: 18px;
+    cursor: pointer;
+}
+.button:hover {
+	-webkit-transform: translateY(-1px);
+	transform: translateY(-3px);
+    background-color: rgb(171, 111, 228);
+}
+.label{
+    font-size: 17px;
+}
