@@ -94,3 +94,47 @@
 	-webkit-transform: translateY(-1px);
 	transform: translateY(-3px);
 }
+.ok-confirm-btn{
+    width: 80px;
+    height:50px;
+    background-color: green;
+    border-radius: 2rem;
+    font-size: 18px;
+    cursor: pointer;
+    color:white;
+}
+.ok-confirm-btn:hover {
+	-webkit-transform: translateY(-1px);
+	transform: translateY(-3px);
+    background-color: rgb(137, 223, 142)
+}
+.cancel-confirm-btn{
+    width: 80px;
+    height:50px;
+    background-color: red;
+    border-radius: 2rem;
+    font-size: 18px;
+    cursor: pointer;
+    color:white;
+}
+.cancel-confirm-btn:hover {
+	-webkit-transform: translateY(-1px);
+	transform: translateY(-3px);
+    background-color: rgb(223, 132, 132);
+}
+.errMsgBox{
+    background-color: rgb(252, 80, 80);
+    font-size: 18px;
+    border-radius: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+.successMsgBox{
+    background-color: rgb(97, 151, 97);
+    font-size: 18px;
+    border-radius: 20px;
+    padding-top: 25px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}

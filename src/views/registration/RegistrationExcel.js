@@ -1,8 +1,21 @@
 import React from "react";
-import { CCardBody, CImg, CRow, CCol, CButton } from "@coreui/react";
+import {
+  CCardBody,
+  CImg,
+  CRow,
+  CCol,
+  CButton,
+  CInputFile,
+  CLabel,
+} from "@coreui/react";
+import $ from "jquery";
 
 const RegistrationExcel = (props) => {
-    let {downloadExcel} = props;
+  let { downloadExcel, clearFile, importFile } = props;
+
+  const excelBtnClick = () => {
+    $("#importFile").click();
+  };
 
   return (
     <CCardBody
@@ -26,7 +39,9 @@ const RegistrationExcel = (props) => {
             />
           </CRow>
           <CRow>
-            <CButton className="buttonExcel" onClick={downloadExcel}>Download</CButton>
+            <CButton className="buttonExcel" onClick={downloadExcel}>
+              Download
+            </CButton>
           </CRow>
         </CCol>
         <CCol lg="2"></CCol>
@@ -39,10 +54,27 @@ const RegistrationExcel = (props) => {
             />
           </CRow>
           <CRow>
-            <CButton className="buttonExcel">Upload</CButton>
+            <CButton
+              htmlFor="importFile"
+              className="buttonExcel"
+              onClick={excelBtnClick}
+            >
+              Upload
+            </CButton>
+            <CInputFile
+              id="importFile"
+              hidden
+              onClick={clearFile}
+              onChange={importFile}
+            />
           </CRow>
         </CCol>
         <CCol lg="3"></CCol>
+      </CRow>
+      <CRow>
+        <CCol style={{textAlign:"end"}}>
+          <CLabel className="label" >Go to Link</CLabel>
+        </CCol>
       </CRow>
     </CCardBody>
   );

@@ -45,7 +45,18 @@ export const ApiRequest = async (value) => {
             message = await ApiRequestErrorHandler(response);
             message === true ? result = response : result = { "flag": false, "message": message, "data": response };
         }).catch(async (error) => {
-            
+            try{
+                // call api response error handler
+                message = await ApiRequestErrorHandler(error.response);
+                result = { "flag": false, "message": message, "data": error.response };
+            }catch(error1){
+                if(error.response !== undefined) {
+                    result = { "flag": false, "message": error.response.data.message, "data": error.response.data.data };
+                } else {
+                    let data = {status: "OK"}      
+                    result = { "flag": false, "message": ["Cannot connect to server"],"data": data };
+                }
+            }
         });
         return result
     

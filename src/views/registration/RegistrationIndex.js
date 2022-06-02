@@ -41,6 +41,9 @@ import Confirmation from "../common/ConfirmBox"; // Appear Comfirmation box
 import Loading from "../common/Loading"; // if function start load image
 import RegistrationExcel from "./RegistrationExcel";
 
+
+const RegistrationIndex = () => {
+
 const [selectedDate, setSelectedDate] = useState(new Date()); //Date picker
 const [err, setErr] = useState([]); //for error
 const [name, setName] = useState(""); //for user name
@@ -64,10 +67,12 @@ const [radioData, setRadioData] = useState([
   { id: 1, name: "Male" },
   { id: 2, name: "Female" },
 ]); // radio array (male,female)
+const [invalidMsg,setInvalidMsg] = useState(false);
 
-const RegistrationIndex = () => {
+
   useEffect(() => {
     systemFormLoad();
+
   }, []);
 
   const [loading, setLoading] = useState(false); // For Loading
@@ -95,7 +100,7 @@ const RegistrationIndex = () => {
       skills: chkskill.toString(),
     };
 
-    console.log("DOB", saveArr.dob);
+    // console.log("DOB", saveArr.dob);
 
     let obj = {
       method: "post",
@@ -113,7 +118,7 @@ const RegistrationIndex = () => {
       });
     } else {
       setErr([]);
-      setSuccess([response.data.message]);
+      // setSuccess([response.data.message]);
 
       window.scrollTo({
         top: 0,
@@ -144,22 +149,22 @@ const RegistrationIndex = () => {
     setShow(true);
   };
 
-  useEffect(() => {
-    systemFormLoad();
-  }, []); //useeffect and call systemFormLoad to get API
+  // useEffect(() => {
+  //   systemFormLoad();
+  // }, []); //useeffect and call systemFormLoad to get API
 
   //get data from API (student_id,career_path,skill)
   const systemFormLoad = async () => {
     let obj = { method: "get", url: "student-registeration/formload" };
     let response = await ApiRequest(obj);
-    console.log("response data", response);
+    // console.log("response data", response);
 
     if (response.data.status == "NG") {
       setErr([response.data.data.message]);
       setSuccess([]);
     } else {
       setErr([]);
-      setSuccess([response.data.message]);
+      setSuccess([]);
     }
     setId(response.data.student_id);
     setCareerData(response.data.career_path);
@@ -206,7 +211,7 @@ const RegistrationIndex = () => {
   const clickRadio = (data) => {
     setRadioName(data.name);
     setRadioValue(data.id);
-  }; x
+  };
 
   let resArr = [];
   //check box (skill) function
@@ -214,15 +219,15 @@ const RegistrationIndex = () => {
     let value = e.target.value;
     let checked = e.target.checked;
 
-    console.log("value", value);
-    console.log("check" + checked);
+    // console.log("value", value);
+    // console.log("check" + checked);
 
     let data = skillData.map((obj) => {
       return parseInt(value) === parseInt(obj.id)
         ? { ...obj, is_checked: checked }
         : obj;
     });
-    console.log(data);
+    // console.log(data);
     setSkillData(data);
 
     for (let i = 0; i < data.length; i++) {
@@ -232,7 +237,7 @@ const RegistrationIndex = () => {
       }
     }
     setChkSkillFinal(resArr);
-    console.log("ResArr", chkSkillFinal);
+    // console.log("ResArr", chkSkillFinal);
   };
 
   //for save button 
@@ -296,6 +301,7 @@ const RegistrationIndex = () => {
     } else {
       setErr(errArray);
       setSuccess([]);
+      setInvalidMsg(true);
       window.scrollTo({
         top: 0,
         left: 0,
@@ -338,27 +344,51 @@ const RegistrationIndex = () => {
       type: "blob",
     };
     let response = await ApiRequest(obj);
-    console.log("response data", response);
 
     if (response.data.status == "NG") {
       setErr([response.data.data.message]);
+      setSuccess([]);
+    } else { // success condition
+      setErr([]);
+      // setSuccess([response.data.message]);
+      let fileName = "StudentRegisteration.xlsx";
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setSuccess(["Successfully Downloaded!"]);
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  };
+
+  const clearFile = (i) =>{
+    i.target.value = null;
+  }
+
+  const importFile = async(i) =>{
+    let file = i.target.files[0];
+
+    let formData = new FormData();
+
+    formData.append("import_file",file);
+    let obj = {
+      method: "post",
+      url: "/student-registeration/excel-import",
+      params: formData
+    };
+    let response = await ApiRequest(obj);
+
+    if(response.flag === false) {
+      setErr(response.message);
       setSuccess([]);
     } else {
       setErr([]);
       setSuccess([response.data.message]);
     }
-
-    let fileName = "StudentRegisteration.xlsx";
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setSuccess("Successfully Downloaded!");
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-  };
+  }
 
   return (
     <CCardBody
@@ -378,20 +408,30 @@ const RegistrationIndex = () => {
         okButton={"OK"}
         cancelButton={"Cancel"}
       />
-
-      <div style={{ textAlign: "center" }}>
-        <br></br>
-        {err.length > 0 &&
-          err.map((e, index) => {
-            return (
-              <p style={{ color: "red", fontSize: "17px" }} key={index}>
-                {e}
-              </p>
-            );
-          })}
-        <p style={{ color: "green", fontSize: "17px" }}>{success}</p>
-        <br></br>
-      </div>
+         
+          {err.length > 0 &&
+            <div className="errMsgBox" >
+              {err.map((e, index) => {
+                return (
+                    <p style={{ color: "white",marginLeft:"50px",borderRadius:"30px" }} key={index}>
+                      {e}
+                    </p>
+                );
+              })}
+          </div>
+          } 
+          {success.length > 0 &&
+            <div className="successMsgBox" >
+            {success.map((s, indexii) => {
+              return (
+                  <p style={{ color: "white",marginLeft:"50px",borderRadius:"30px" }} key={indexii}>
+                    {s}
+                  </p>
+              )
+            })}
+            </div>
+            }
+        
       <CTabs activeTab="system" className="tab">
         <CNav variant="tabs">
           <CNavItem>
@@ -653,7 +693,11 @@ const RegistrationIndex = () => {
             </CCardBody>
           </CTabPane>
           <CTabPane data-tab="excel">
-            <RegistrationExcel downloadExcel={downloadExcel} />
+            <RegistrationExcel 
+              downloadExcel={downloadExcel}
+              importFile={importFile}
+              clearFile={clearFile}
+             />
           </CTabPane>
         </CTabContent>
       </CTabs>
