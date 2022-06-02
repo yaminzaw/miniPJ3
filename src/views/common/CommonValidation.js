@@ -9,7 +9,7 @@
  */
 export const validateName = (name) =>{
 
-    let namechk = /^[a-z ,.'-]+$/i;
+    let namechk = (/^[A-Za-z]+$/);
     if(name.match(namechk)){
         return true;
     }else return false;
