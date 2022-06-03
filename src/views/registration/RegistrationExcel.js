@@ -19,11 +19,7 @@ const RegistrationExcel = (props) => {
 
   return (
     <CCardBody
-      style={{
-        backgroundColor: "rgb(229, 215, 241)",
-        borderRadius: "30px",
-        marginBottom: "30px",
-      }}
+      className='cardBody'
     >
       <CRow className="headerExcelRow">
         <h2 className="header">Student Registration Form</h2>

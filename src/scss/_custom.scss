@@ -88,7 +88,7 @@
 }
 .tabName{
     font-size: 20px;
-    background-color: rgb(205, 178, 231);
+    background-color: rgb(215, 201, 228);
 }
 .imgExcel:hover {
 	-webkit-transform: translateY(-1px);
@@ -123,7 +123,7 @@
     background-color: rgb(223, 132, 132);
 }
 .errMsgBox{
-    background-color: rgb(252, 80, 80);
+    background-color: rgb(250, 71, 71);
     font-size: 18px;
     border-radius: 20px;
     padding-top: 20px;
@@ -137,4 +137,105 @@
     padding-top: 25px;
     padding-bottom: 20px;
     margin-bottom: 20px;
+}
+.cardBody{
+        background: linear-gradient(to top, #ccccff 33%, #cc99ff 96%);
+        border-radius:30px;
+        margin-bottom: 30px;
+     
+}
+.buttonList{
+    max-width: 80%;
+    min-width: 60%;
+    height:45px;
+    background-color: rgb(184, 139, 226);
+    border-radius: 2rem;
+    border:rgb(142, 30, 247);
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+.buttonList:hover{
+    -webkit-transform: translateY(-1px);
+	transform: translateY(-3px);
+    background-color: rgb(171, 111, 228);
+}
+.img:hover {
+	-webkit-transform: translateY(-1px);
+	transform: translateY(-3px);
+}
+.img{
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+.mainTable{
+    width:100%;
+    min-width: 1200px;
+    margin-left: 30px;
+}
+.thData{
+    border:1px solid;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #e0c7fa;
+}
+table tbody tr td{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+tr:nth-child(even) {
+    background-color: #f1ebf7;
+}
+.editBtn{
+    max-width: 80%;
+    min-width: 60%;
+    height:45px;
+    background-color: rgb(184, 139, 226);
+    border-radius: 10px;
+    border:rgb(142, 30, 247);
+    font-size: 15px;
+    cursor: pointer;
+}
+.editBtn:hover{
+    -webkit-transform: translateY(-1px);
+	transform: translateY(-3px);
+    background-color: rgb(171, 111, 228);
+}
+.detailBtn{
+    max-width: 80%;
+    min-width: 60%;
+    height:45px;
+    background-color: rgb(25, 226, 52);
+    border-radius: 10px;
+    border:rgb(1, 219, 30);
+    font-size: 15px;
+    cursor: pointer;
+}
+.detailBtn:hover{
+    -webkit-transform: translateY(-1px);
+	transform: translateY(-3px);
+    background-color: rgb(53, 230, 77);
+}
+.deleteBtn{
+    max-width: 80%;
+    min-width: 60%;
+    height:45px;
+    background-color: rgb(240, 49, 49);
+    border-radius: 10px;
+    border:rgb(238, 33, 5);
+    font-size: 15px;
+    cursor: pointer;
+}
+.deleteBtn:hover{
+    -webkit-transform: translateY(-1px);
+	transform: translateY(-3px);
+    background-color: rgb(241, 83, 62);
+}
+.tdData{
+    border:1px solid;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }

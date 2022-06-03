@@ -207,7 +207,6 @@ const [invalidMsg,setInvalidMsg] = useState(false);
     setChooseCareer(e.target.value);
   }; 
 
-  //check box (skill) function
   const clickRadio = (data) => {
     setRadioName(data.name);
     setRadioValue(data.id);
@@ -364,10 +363,12 @@ const [invalidMsg,setInvalidMsg] = useState(false);
     }
   };
 
+  //initial state => null 
   const clearFile = (i) =>{
     i.target.value = null;
   }
 
+  //for upload excel file
   const importFile = async(i) =>{
     let file = i.target.files[0];
 
@@ -392,11 +393,7 @@ const [invalidMsg,setInvalidMsg] = useState(false);
 
   return (
     <CCardBody
-      style={{
-        backgroundColor: "rgb(229, 215, 241)",
-        borderRadius: "30px",
-        marginBottom: "30px",
-      }}
+    className="cardBody"
     >
       <Loading start={loading} />
       <Confirmation
@@ -683,8 +680,8 @@ const [invalidMsg,setInvalidMsg] = useState(false);
                     </CCol>
                   </CRow>
                   <CRow className="rowDiv">
-                    <CCol>
-                      <CLabel className="label">Go to Link</CLabel>
+                    <CCol lg="12">
+                      <CLabel className="label" style={{textAlign:"end"}}>Go to Link</CLabel>
                     </CCol>
                   </CRow>
                 </CCol>
