@@ -40,6 +40,7 @@ import Moment from "moment";
 import Confirmation from "../common/ConfirmBox"; // Appear Comfirmation box
 import Loading from "../common/Loading"; // if function start load image
 import RegistrationExcel from "./RegistrationExcel";
+import SuccessError from "../common/SuccessError";
 
 
 const RegistrationIndex = () => {
@@ -118,7 +119,7 @@ const [invalidMsg,setInvalidMsg] = useState(false);
       });
     } else {
       setErr([]);
-      // setSuccess([response.data.message]);
+      setSuccess([response.data.message]);
 
       window.scrollTo({
         top: 0,
@@ -149,15 +150,11 @@ const [invalidMsg,setInvalidMsg] = useState(false);
     setShow(true);
   };
 
-  // useEffect(() => {
-  //   systemFormLoad();
-  // }, []); //useeffect and call systemFormLoad to get API
 
   //get data from API (student_id,career_path,skill)
   const systemFormLoad = async () => {
     let obj = { method: "get", url: "student-registeration/formload" };
     let response = await ApiRequest(obj);
-    // console.log("response data", response);
 
     if (response.data.status == "NG") {
       setErr([response.data.data.message]);
@@ -297,6 +294,11 @@ const [invalidMsg,setInvalidMsg] = useState(false);
       setShow(true);
       setContent("Are you sure you want to save data");
       setType("save-data");
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
     } else {
       setErr(errArray);
       setSuccess([]);
@@ -404,31 +406,8 @@ const [invalidMsg,setInvalidMsg] = useState(false);
         saveData={saveData}
         okButton={"OK"}
         cancelButton={"Cancel"}
-      />
-         
-          {err.length > 0 &&
-            <div className="errMsgBox" >
-              {err.map((e, index) => {
-                return (
-                    <p style={{ color: "white",marginLeft:"50px",borderRadius:"30px" }} key={index}>
-                      {e}
-                    </p>
-                );
-              })}
-          </div>
-          } 
-          {success.length > 0 &&
-            <div className="successMsgBox" >
-            {success.map((s, indexii) => {
-              return (
-                  <p style={{ color: "white",marginLeft:"50px",borderRadius:"30px" }} key={indexii}>
-                    {s}
-                  </p>
-              )
-            })}
-            </div>
-            }
-        
+      />    
+      <SuccessError  success={success} error={err} />
       <CTabs activeTab="system" className="tab">
         <CNav variant="tabs">
           <CNavItem>
@@ -449,7 +428,7 @@ const [invalidMsg,setInvalidMsg] = useState(false);
                 <CCol lg="4"></CCol>
                 <CCol lg="4" xs="12" sm="12" md="12">
                   <CRow className="headerRow">
-                    <h2 className="headerText">Student Registration Form</h2>
+                    <h3 className="headerText">Student Registration Form</h3>
                   </CRow>
                   <CRow className="imgRow">
                     <CLabel

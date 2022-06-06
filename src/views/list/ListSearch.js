@@ -17,7 +17,7 @@ const ListSearch = (props) => {
     searchBy,
     clickRadio,
     radioData,
-    radioValue,
+    downloadTypeId,
     searchChange,
     searchTextBox,
     clickSearch,
@@ -73,8 +73,12 @@ const ListSearch = (props) => {
                       style={{ marginTop: "10px" }}
                       name={data.name}
                       value={data.id}
-                      checked={parseInt(radioValue) === parseInt(data.id) ? true : false}
-                      onChange={() => clickRadio(data)} 
+                      checked={
+                        parseInt(downloadTypeId) === parseInt(data.id)
+                          ? true
+                          : false
+                      }
+                      onChange={() => clickRadio(data)}
                     />
                     <CLabel
                       style={{
@@ -91,7 +95,13 @@ const ListSearch = (props) => {
             })}
           </CCol>
           <CCol lg="4">
-            <CButton className="buttonList" onClick={downloadBtn}>Download</CButton>
+            <CButton className="buttonList" onClick={downloadBtn}>
+              <CImg
+                style={{ width: "25px", height: "25px" }}
+                src={"/avatars/download.png"}
+              />
+              Download
+            </CButton>
           </CCol>
           <CCol lg="4">
             <CButton className="buttonList" onClick={regBtn}>
