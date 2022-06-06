@@ -10,8 +10,10 @@ import Loading from "../common/Loading";
 import CommonMessage from "../common/CommonMessage";
 import $ from "jquery";
 import Confirmation from "../common/ConfirmBox";
+import { useHistory } from "react-router-dom";
 
 const ListIndex = () => {
+  const history = useHistory();
   const [searchBy, setSearchBy] = useState([
     { id: 0, name: "All" },
     { id: 1, name: "ID" },
@@ -186,12 +188,16 @@ const ListIndex = () => {
 
   //for registration button
   const regBtn = () => {
-    alert("click Reg");
+    history.push(`/registration`);
   };
 
   //for edit button
-  const editBtn = () => {
-    alert("click Edit Btn");
+  const editBtn = (e) => {
+    let data ={ 
+      id: e.id
+    };
+    localStorage.setItem('STUDENT_DATA', JSON.stringify(data) );
+    history.push(`/registration`);
   };
 
   //for detail button

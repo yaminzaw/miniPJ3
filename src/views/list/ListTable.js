@@ -77,7 +77,7 @@ const ListTable = (props) => {
                     <td className="tdData">{data.career_name}</td>
                     <td className="tdData">{data.phone}</td>
                     <td className="tdData" width="130px">
-                      <CButton className="editBtn" onClick={editBtn}>
+                      <CButton className="editBtn" onClick={()=>editBtn(data)}>
                         <CImg
                           style={{ width: "25px", height: "25px" }}
                           src={"/avatars/edit.png"}
