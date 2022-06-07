@@ -163,7 +163,7 @@ const DetailModal = (props) => {
               <CLabel>:</CLabel>
             </CCol>
             <CCol lg="4" style={{ textAlign: "start" }}>
-              <CLabel>{detailData.career_name}</CLabel>
+              <CLabel>{detailData.career_path_id}</CLabel>
             </CCol>
             <CCol lg="1"></CCol>
           </CRow>

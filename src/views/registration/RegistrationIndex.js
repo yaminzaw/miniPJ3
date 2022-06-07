@@ -42,119 +42,75 @@ import Loading from "../common/Loading"; // if function start load image
 import RegistrationExcel from "./RegistrationExcel";
 import SuccessError from "../common/SuccessError";
 
-
 const RegistrationIndex = () => {
-
-const [selectedDate, setSelectedDate] = useState(new Date()); //Date picker
-const [err, setErr] = useState([]); //for error
-const [name, setName] = useState(""); //for user name
-const [fatherName, setFatherName] = useState(""); //for father name
-const [nrc, setNrc] = useState(""); //for nrc
-const [ph, setPh] = useState(""); //for ph no
-const [email, setEmail] = useState(""); //for email
-const [address, setAddress] = useState(""); //for address
-const [imagePreviewUrl, setImagePreviewUrl] = useState("/avatars/profile.jpg"); //for initial image
-const [image, setImage] = useState(""); //for image
-const [careerData, setCareerData] = useState([]); //for career data (call from API)
-const [skillData, setSkillData] = useState([]); //for skill data (call from API)
-const [chooseCareer, setChooseCareer] = useState(""); //for career choose
-const [success, setSuccess] = useState([]); //for success message
-const [id, setId] = useState(""); //for id
-const [radioName, setRadioName] = useState(""); //for radio name (male,female)
-const [radioValue, setRadioValue] = useState(""); //for radio id(1,2)
-const [chkSkillFinal, setChkSkillFinal] = useState([]); //for check skill (final array)
-const [chkskill, setChkskill] = useState([]); //for check skill (loop and tempory array)
-const [radioData, setRadioData] = useState([
-  { id: 1, name: "Male" },
-  { id: 2, name: "Female" },
-]); // radio array (male,female)
-const [invalidMsg,setInvalidMsg] = useState(false);
-
-
-  useEffect(() => {
-    systemFormLoad();
-
-  }, []);
-
+  const [selectedDate, setSelectedDate] = useState(new Date()); //Date picker
+  const [err, setErr] = useState([]); //for error
+  const [name, setName] = useState(""); //for user name
+  const [fatherName, setFatherName] = useState(""); //for father name
+  const [nrc, setNrc] = useState(""); //for nrc
+  const [ph, setPh] = useState(""); //for ph no
+  const [email, setEmail] = useState(""); //for email
+  const [address, setAddress] = useState(""); //for address
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(
+    "/avatars/profile.jpg"
+  ); //for initial image
+  const [image, setImage] = useState(""); //for image
+  const [careerData, setCareerData] = useState([]); //for career data (call from API)
+  const [skillData, setSkillData] = useState([]); //for skill data (call from API)
+  const [chooseCareer, setChooseCareer] = useState(""); //for career choose
+  const [success, setSuccess] = useState([]); //for success message
+  const [id, setId] = useState(""); //for id
+  const [radioName, setRadioName] = useState(""); //for radio name (male,female)
+  const [radioValue, setRadioValue] = useState(""); //for radio id(1,2)
+  const [chkSkillFinal, setChkSkillFinal] = useState([]); //for check skill (final array)
+  const [chkskill, setChkskill] = useState([]); //for check skill (loop and tempory array)
+  const [radioData, setRadioData] = useState([
+    { id: 1, name: "Male" },
+    { id: 2, name: "Female" },
+  ]); // radio array (male,female)
+  const [invalidMsg, setInvalidMsg] = useState(false);
   const [loading, setLoading] = useState(false); // For Loading
   const [show, setShow] = useState(false); // for confirmation message box
   const [content, setContent] = useState(""); // for content confirmation message
   const [type, setType] = useState(""); // for confirmation type
+  const [editStatus, setEditStatus] = useState(false);//for edit status
+  const [editId,setEditId] = useState();
 
-  /*
-   * Save data with API(Comfirm Box)
-   */
-  const saveData = async () => {
+  useEffect(() => {
+    let data = JSON.parse(localStorage.getItem("STUDENT_DATA"));
+    localStorage.removeItem("STUDENT_DATA"); //clear section
+    console.log('id 1', data);
+    setEditId(data);
+
+    systemFormLoad(data);
+    console.log("form id", data);
+  }, []);
+
+  
+  //get data from API (student_id,career_path,skill)
+  const systemFormLoad = async (data) => {
     setLoading(true);
-    let saveArr = {
-      student_id: id,
-      student_name: name,
-      father_name: fatherName,
-      nrc: nrc,
-      phone: ph,
-      email: email,
-      gender: radioValue,
-      dob: Moment(selectedDate).format("YYYY-MM-DD"),
-      address: address,
-      photo: image,
-      career_path: chooseCareer,
-      skills: chkskill.toString(),
-    };
-
-    // console.log("DOB", saveArr.dob);
-
-    let obj = {
-      method: "post",
-      url: "student-registeration/save",
-      params: saveArr,
-    };
+    let obj = { method: "get", url: "student-registeration/formload" };
     let response = await ApiRequest(obj);
-    if (response.data.status == "NG") {
-      setErr([response.data.data.message]);
-      setSuccess([]);
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
-    } else {
-      setErr([]);
-      setSuccess([response.data.message]);
 
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
+    setId(response.data.student_id);
+    setCareerData(response.data.career_path);
+    setSkillData(response.data.skill);
 
+    if (data === "" || data === null) {
       setImagePreviewUrl("/avatars/profile.jpg");
-      setName("");
-      setFatherName("");
-      setNrc("");
-      setPh("");
-      setEmail("");
-      setAddress("");
-      setErr([]);
       setRadioValue("");
       setChooseCareer("");
-      setSelectedDate(new Date());
+      setSuccess([]);
+      setErr([]);
 
       skillData.map((d, i) => {
         d.is_checked = false;
       });
+    } else {
+      systemFormLoadEdit(data, response.data.skill);
+      setEditStatus(true);
     }
-    setLoading(false);
-    setShow(false);
-  };
-  const saveBtnClick = () => {
-    setShow(true);
-  };
-
-
-  //get data from API (student_id,career_path,skill)
-  const systemFormLoad = async () => {
-    let obj = { method: "get", url: "student-registeration/formload" };
-    let response = await ApiRequest(obj);
 
     if (response.data.status == "NG") {
       setErr([response.data.data.message]);
@@ -163,9 +119,41 @@ const [invalidMsg,setInvalidMsg] = useState(false);
       setErr([]);
       setSuccess([]);
     }
-    setId(response.data.student_id);
-    setCareerData(response.data.career_path);
-    setSkillData(response.data.skill);
+  };
+
+  //edit function (auto fill in registration form when click edit)
+  const systemFormLoadEdit = async (data, skills) => {
+    setLoading(true);
+    let obj = {
+      method: "get",
+      url: "student-list/detail",
+      params: { id: data.id },
+    };
+    let response = await ApiRequest(obj);
+    console.log("response",response)
+    setId(response.data.data[0].student_id);
+    setName(response.data.data[0].student_name);
+    setFatherName(response.data.data[0].father_name);
+    setNrc(response.data.data[0].nrc);
+    setPh(response.data.data[0].phone);
+    setEmail(response.data.data[0].email);
+    setRadioValue(response.data.data[0].gender);
+    setSelectedDate(response.data.data[0].dob);
+    setAddress(response.data.data[0].address);
+    setChooseCareer(response.data.data[0].career_path_id);
+    
+    setChkSkillFinal(response.data.data[0].skills);
+
+    let editSkill = response.data.data[0].skills
+      .split(",")
+      .map((i) => Number(i));
+      setChkSkillFinal(editSkill);
+    let editArr = skills.map((data, index) =>
+      editSkill.includes(data.id) ? { ...data, is_checked: true } : data
+    );
+
+    setSkillData(editArr);
+    setLoading(false);
   };
 
   const handleChangeName = (e) => {
@@ -197,13 +185,14 @@ const [invalidMsg,setInvalidMsg] = useState(false);
     };
     setImage(file.name);
     reader.readAsDataURL(file);
-  }; 
+  };
 
   //career function
   let selectCareer = (e) => {
     setChooseCareer(e.target.value);
-  }; 
+  };
 
+  //radio click
   const clickRadio = (data) => {
     setRadioName(data.name);
     setRadioValue(data.id);
@@ -215,15 +204,12 @@ const [invalidMsg,setInvalidMsg] = useState(false);
     let value = e.target.value;
     let checked = e.target.checked;
 
-    // console.log("value", value);
-    // console.log("check" + checked);
-
     let data = skillData.map((obj) => {
       return parseInt(value) === parseInt(obj.id)
         ? { ...obj, is_checked: checked }
         : obj;
     });
-    // console.log(data);
+
     setSkillData(data);
 
     for (let i = 0; i < data.length; i++) {
@@ -231,12 +217,15 @@ const [invalidMsg,setInvalidMsg] = useState(false);
         resArr.push(data[i]);
         setChkskill([...chkskill, data[i].id]);
       }
-    }
-    setChkSkillFinal(resArr);
-    // console.log("ResArr", chkSkillFinal);
+    }//formload check box
+
+    let checkedIdArr = [];
+    data.filter((value)=> value.is_checked ? checkedIdArr.push(value.id) : '');
+    
+    setChkSkillFinal(checkedIdArr);//edit check box
   };
 
-  //for save button 
+  //for save button
   const save = async () => {
     let errArray = [];
 
@@ -244,7 +233,7 @@ const [invalidMsg,setInvalidMsg] = useState(false);
       errArray.push("Please Enter Name");
     } else if (!validateName(name)) {
       errArray.push("Invalid name");
-    }//validate name
+    } //validate name
 
     if (!nullChk(fatherName)) {
       errArray.push("Please Enter Father Name");
@@ -292,13 +281,14 @@ const [invalidMsg,setInvalidMsg] = useState(false);
 
     if (errArray == [] || errArray == "") {
       setShow(true);
-      setContent("Are you sure you want to save data");
-      setType("save-data");
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
+      if(editStatus){
+        setShow(true);
+        setContent("Are you sure you want to update data");
+        setType("update");
+      }else{
+        setContent("Are you sure you want to save data");
+        setType("save-data");
+      }
     } else {
       setErr(errArray);
       setSuccess([]);
@@ -349,7 +339,8 @@ const [invalidMsg,setInvalidMsg] = useState(false);
     if (response.data.status == "NG") {
       setErr([response.data.data.message]);
       setSuccess([]);
-    } else { // success condition
+    } else {
+      // success condition
       setErr([]);
       // setSuccess([response.data.message]);
       let fileName = "StudentRegisteration.xlsx";
@@ -365,38 +356,169 @@ const [invalidMsg,setInvalidMsg] = useState(false);
     }
   };
 
-  //initial state => null 
-  const clearFile = (i) =>{
+  //initial state => null
+  const clearFile = (i) => {
     i.target.value = null;
-  }
+  };
 
   //for upload excel file
-  const importFile = async(i) =>{
+  const importFile = async (i) => {
     let file = i.target.files[0];
 
     let formData = new FormData();
 
-    formData.append("import_file",file);
+    formData.append("import_file", file);
     let obj = {
       method: "post",
       url: "/student-registeration/excel-import",
-      params: formData
+      params: formData,
     };
     let response = await ApiRequest(obj);
 
-    if(response.flag === false) {
+    if (response.flag === false) {
       setErr(response.message);
       setSuccess([]);
     } else {
       setErr([]);
       setSuccess([response.data.message]);
     }
+  };
+
+  /*
+   * Save data with API(Comfirm Box)
+   */
+  const saveData = async () => {
+    setLoading(true);
+    setErr([]);
+    setSuccess([]);
+
+    let saveArr = {
+      student_id: id,
+      student_name: name,
+      father_name: fatherName,
+      nrc: nrc,
+      phone: ph,
+      email: email,
+      gender: radioValue,
+      dob: Moment(selectedDate).format("YYYY-MM-DD"),
+      address: address,
+      photo: image,
+      career_path: chooseCareer,
+      skills: chkskill.toString(),
+    };
+
+    let obj = {
+      method: "post",
+      url: "student-registeration/save",
+      params: saveArr,
+    };
+    let response = await ApiRequest(obj);
+    if (response.data.status == "NG") {
+      setErr([response.data.data.message]);
+      setSuccess([]);
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    } else {
+      setErr([]);
+      setSuccess([response.data.message]);
+
+      setImagePreviewUrl("/avatars/profile.jpg");
+      setName("");
+      setFatherName("");
+      setNrc("");
+      setPh("");
+      setEmail("");
+      setAddress("");
+      setErr([]);
+      setRadioValue("");
+      setChooseCareer("");
+      setSelectedDate(new Date());
+
+      skillData.map((d, i) => {
+        d.is_checked = false;
+      });
+
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    }
+    setLoading(false);
+    setShow(false);
+  };
+
+
+  const updateOK = async()=>{
+    setLoading(true);
+    setErr([]);
+    setSuccess([]);
+    
+    let saveArr = {
+      student_id: id,
+      student_name: name,
+      father_name: fatherName,
+      nrc: nrc,
+      phone: ph,
+      email: email,
+      gender: radioValue,
+      dob: Moment(selectedDate).format("YYYY-MM-DD"),
+      address: address,
+      photo: image,
+      career_path: chooseCareer,
+      skills: chkSkillFinal.toString(),
+      id: editId.id
+    };
+
+    let obj = {
+      method: "post",
+      url: "student-registeration/update",
+      params: saveArr,
+    };
+    let response = await ApiRequest(obj);
+    if (response.data.status == "NG") {
+      setErr([response.data.data.message]);
+      setSuccess([]);
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    } else {
+      setErr([]);
+      setSuccess([response.data.message]);
+
+      setImagePreviewUrl("/avatars/profile.jpg");
+      setName("");
+      setFatherName("");
+      setNrc("");
+      setPh("");
+      setEmail("");
+      setAddress("");
+      setErr([]);
+      setRadioValue("");
+      setChooseCareer("");
+      setSelectedDate(new Date());
+
+      skillData.map((d, i) => {
+        d.is_checked = false;
+      });
+
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    }
+    setLoading(false);
+    setShow(false);
   }
 
   return (
-    <CCardBody
-    className="cardBody"
-    >
+    <CCardBody className="cardBody">
       <Loading start={loading} />
       <Confirmation
         show={show}
@@ -406,8 +528,9 @@ const [invalidMsg,setInvalidMsg] = useState(false);
         saveData={saveData}
         okButton={"OK"}
         cancelButton={"Cancel"}
-      />    
-      <SuccessError  success={success} error={err} />
+        updateOK={updateOK}
+      />
+      <SuccessError success={success} error={err} />
       <CTabs activeTab="system" className="tab">
         <CNav variant="tabs">
           <CNavItem>
@@ -626,7 +749,7 @@ const [invalidMsg,setInvalidMsg] = useState(false);
                                 name={chk.name}
                                 value={chk.id}
                                 onChange={checkSome}
-                                checked={chk.is_checked == true}
+                                checked={chk.is_checked}
                               />
                               <CLabel
                                 className="label"
@@ -648,9 +771,16 @@ const [invalidMsg,setInvalidMsg] = useState(false);
                       md="6"
                       style={{ textAlign: "end" }}
                     >
-                      <CButton className="button" onClick={save}>
-                        Save
-                      </CButton>
+                      {editStatus && (
+                        <CButton className="button" onClick={save}>
+                          Update
+                        </CButton>
+                      )}
+                      {!editStatus && (
+                        <CButton className="button" onClick={save}>
+                          Save
+                        </CButton>
+                      )}
                     </CCol>
                     <CCol lg="6" xs="6" sm="6" md="6">
                       <CButton className="button" onClick={resetAll}>
@@ -660,7 +790,9 @@ const [invalidMsg,setInvalidMsg] = useState(false);
                   </CRow>
                   <CRow className="rowDiv">
                     <CCol lg="12">
-                      <CLabel className="label" style={{textAlign:"end"}}>Go to Link</CLabel>
+                      <CLabel className="label" style={{ textAlign: "end" }}>
+                        Go to Link
+                      </CLabel>
                     </CCol>
                   </CRow>
                 </CCol>
@@ -669,11 +801,11 @@ const [invalidMsg,setInvalidMsg] = useState(false);
             </CCardBody>
           </CTabPane>
           <CTabPane data-tab="excel">
-            <RegistrationExcel 
+            <RegistrationExcel
               downloadExcel={downloadExcel}
               importFile={importFile}
               clearFile={clearFile}
-             />
+            />
           </CTabPane>
         </CTabContent>
       </CTabs>
