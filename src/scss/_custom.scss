@@ -266,4 +266,25 @@ tr:nth-child(even) {
     border: 1px solid #e55353 !important;
     border-radius: 10px;
   }
-  
+.addBtn{
+    max-width: 70%;
+    min-width: 50%;
+    height:35px;
+    background-color: green;
+    border-radius: 15px;
+    border:rgb(1, 219, 30);
+    font-size: 15px;
+    cursor: pointer;
+    color: white;
+}
+.addBtn:hover{
+    -webkit-transform: translateY(-1px);
+	transform: translateY(-3px);
+    background-color: rgb(53, 230, 77);
+}
+.select{
+    margin-bottom: 30px;
+}
+.addTable{
+    min-width: 700px;
+}

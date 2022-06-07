@@ -41,6 +41,7 @@ import Confirmation from "../common/ConfirmBox"; // Appear Comfirmation box
 import Loading from "../common/Loading"; // if function start load image
 import RegistrationExcel from "./RegistrationExcel";
 import SuccessError from "../common/SuccessError";
+import { Link } from "react-router-dom";
 
 const RegistrationIndex = () => {
   const [selectedDate, setSelectedDate] = useState(new Date()); //Date picker
@@ -789,10 +790,16 @@ const RegistrationIndex = () => {
                     </CCol>
                   </CRow>
                   <CRow className="rowDiv">
-                    <CCol lg="12">
-                      <CLabel className="label" style={{ textAlign: "end" }}>
+                    <CCol lg="6">
+                      
+                      <Link to="/employee" style={{ textAlign: "start" }}>
+                        Go to Employee
+                      </Link>
+                    </CCol>
+                    <CCol lg="6">
+                      <Link to="/list" style={{ textAlign: "end" }}>
                         Go to Link
-                      </CLabel>
+                      </Link>
                     </CCol>
                   </CRow>
                 </CCol>
